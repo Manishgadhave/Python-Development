@@ -11,7 +11,7 @@ This project is a simple graphical user interface (GUI) application for user aut
 ## Screenshots
 
 ### Sign Up Page
-![Sign Up Page](./mnt/data/Python%203.12%2028-07-2024%2019_59_32.png)
+![Sign Up Page](User_Authentication_System/Python 3.12 28-07-2024 19_59_32.png)
 
 ### Login Page
 ![Login Page](./mnt/data/Python%203.12%2028-07-2024%2019_59_48.png)
