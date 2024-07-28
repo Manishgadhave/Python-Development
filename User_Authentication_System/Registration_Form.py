@@ -1,0 +1,198 @@
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
+from tkcalendar import Calendar
+
+root = Tk()
+root.title('Registration Form')
+root.geometry("500x500")
+
+
+def register():
+    email = email_value.get()
+    phone = phone_value.get()
+
+    if '@gmail.com' not in email:
+        messagebox.showerror("Error", "Please enter a valid Gmail address")
+        return
+
+    if not phone.isdigit() or len(phone) != 10:
+        messagebox.showerror("Error", "Please enter a valid 10-digit phone number")
+        return
+
+    messagebox.showinfo("Success", "You have registered successfully")
+    print("Your Information has been saved successfully")
+
+    clear_all()  # Clear all fields after registration
+
+
+def clear_all():
+    first_value.set("")
+    last_value.set("")
+    father_value.set("")
+    male_var.set(0)
+    female_var.set(0)
+    phone_value.set("")
+    address_value.set("")
+    email_value.set("")
+    college_value.set("")
+    dob_entry.delete(0, END)
+    dob_entry.insert(0, "dd/mm/yyyy")
+    dob_entry.config(fg="grey")
+    check_box.deselect()
+    year_value.set("")
+    branch_value.set("")
+
+
+def pick_date(event):
+    global cal, date_window
+    date_window = Toplevel()
+    date_window.grab_set()
+    date_window.title("Choose DOB")
+    date_window.geometry("250x220+590+370")
+    cal = Calendar(date_window, selectmode="day", date_pattern="dd/mm/y")
+    cal.place(x=0, y=0)
+
+    submit_btn = Button(date_window, text="Submit", command=grab_date)
+    submit_btn.place(x=80, y=190)
+
+
+def grab_date():
+    dob_entry.delete(0, END)
+    dob_entry.insert(0, cal.get_date())
+    date_window.destroy()
+
+
+def validate_phone(action, value_if_allowed):
+    if action == '1':  # '1' means inserting text
+        return value_if_allowed.isdigit()
+    return True
+
+
+def clear_placeholder(event, widget, placeholder):
+    if widget.get() == placeholder:
+        widget.delete(0, END)
+        widget.config(fg='black')
+
+
+def restore_placeholder(event, widget, placeholder):
+    if widget.get() == "":
+        widget.insert(0, placeholder)
+        widget.config(fg='grey')
+
+
+Label(root, text="Student Registration Form", font="arial 15 bold").grid(row=0, column=3)
+
+first_user = Label(root, text="First Name")
+first_user.grid(row=1, column=2)
+last_user = Label(root, text="Last Name")
+last_user.grid(row=2, column=2)
+father_user = Label(root, text="Father Name")
+father_user.grid(row=3, column=2)
+gender_user = Label(root, text="Gender")
+gender_user.grid(row=4, column=2)
+dob_user = Label(root, text="Date Of Birth")
+dob_user.grid(row=5, column=2)
+phone_user = Label(root, text="Phone Number")
+phone_user.grid(row=6, column=2)
+address_user = Label(root, text="Address")
+address_user.grid(row=7, column=2)
+email_user = Label(root, text="Gmail Address")
+email_user.grid(row=8, column=2)
+college_user = Label(root, text="College Name")
+college_user.grid(row=9, column=2)
+year_user = Label(root, text="Select Year")
+year_user.grid(row=10, column=2)
+branch_user = Label(root, text="Select Branch")
+branch_user.grid(row=11, column=2)
+
+first_value = StringVar()
+last_value = StringVar()
+father_value = StringVar()
+phone_value = StringVar()
+address_value = StringVar()
+email_value = StringVar()
+college_value = StringVar()
+check_box = IntVar()
+year_value = StringVar()
+branch_value = StringVar()
+male_var = IntVar()
+female_var = IntVar()
+
+first_box = Entry(root, textvariable=first_value)
+first_box.grid(row=1, column=3)
+first_box.insert(0, "Tony")  # Placeholder
+first_box.config(fg="grey")
+first_box.bind("<FocusIn>", lambda event: clear_placeholder(event, first_box, "Tony"))
+first_box.bind("<FocusOut>", lambda event: restore_placeholder(event, first_box, "Tony"))
+
+last_box = Entry(root, textvariable=last_value)
+last_box.grid(row=2, column=3)
+last_box.insert(0, "Stark")  # Placeholder
+last_box.config(fg="grey")
+last_box.bind("<FocusIn>", lambda event: clear_placeholder(event, last_box, "Stark"))
+last_box.bind("<FocusOut>", lambda event: restore_placeholder(event, last_box, "Stark"))
+
+father_box = Entry(root, textvariable=father_value)
+father_box.grid(row=3, column=3)
+father_box.insert(0, "Howard")  # Placeholder
+father_box.config(fg="grey")
+father_box.bind("<FocusIn>", lambda event: clear_placeholder(event, father_box, "Howard"))
+father_box.bind("<FocusOut>", lambda event: restore_placeholder(event, father_box, "Howard"))
+
+dob_entry = Entry(root, highlightthickness=0, relief=FLAT, bg="White", fg="grey", font=("vu gothic ui", 13, "bold"))
+dob_entry.grid(row=5, column=3)
+dob_entry.insert(0, "dd/mm/yyyy")
+dob_entry.bind("<1>", pick_date)
+dob_entry.bind("<FocusIn>", lambda event: clear_placeholder(event, dob_entry, "dd/mm/yyyy"))
+dob_entry.bind("<FocusOut>", lambda event: restore_placeholder(event, dob_entry, "dd/mm/yyyy"))
+
+phone_validate_cmd = root.register(validate_phone)
+phone_box = Entry(root, textvariable=phone_value, validate="key", validatecommand=(phone_validate_cmd, '%d', '%P'))
+phone_box.grid(row=6, column=3)
+phone_box.insert(0, "1234567890")  # Placeholder
+phone_box.config(fg="grey")
+phone_box.bind("<FocusIn>", lambda event: clear_placeholder(event, phone_box, "1234567890"))
+phone_box.bind("<FocusOut>", lambda event: restore_placeholder(event, phone_box, "1234567890"))
+
+address_box = Entry(root, textvariable=address_value)
+address_box.grid(row=7, column=3)
+address_box.insert(0, "California")  # Placeholder
+address_box.config(fg="grey")
+address_box.bind("<FocusIn>", lambda event: clear_placeholder(event, address_box, "California"))
+address_box.bind("<FocusOut>", lambda event: restore_placeholder(event, address_box, "California"))
+
+email_box = Entry(root, textvariable=email_value)
+email_box.grid(row=8, column=3)
+email_box.insert(0, "tonystark@gmail.com")  # Placeholder
+email_box.config(fg="grey")
+email_box.bind("<FocusIn>", lambda event: clear_placeholder(event, email_box, "tonystark@gmail.com"))
+email_box.bind("<FocusOut>", lambda event: restore_placeholder(event, email_box, "tonystark@gmail.com"))
+
+college_box = Entry(root, textvariable=college_value)
+college_box.grid(row=9, column=3)
+college_box.insert(0, "MIT")  # Placeholder
+college_box.config(fg="grey")
+college_box.bind("<FocusIn>", lambda event: clear_placeholder(event, college_box, "MIT"))
+college_box.bind("<FocusOut>", lambda event: restore_placeholder(event, college_box, "MIT"))
+
+male_checkbox = Checkbutton(root, text="Male", variable=male_var)
+male_checkbox.grid(row=4, column=3)
+female_checkbox = Checkbutton(root, text="Female", variable=female_var)
+female_checkbox.grid(row=4, column=4)
+
+year_dropdown = ttk.Combobox(root, textvariable=year_value)
+year_dropdown['values'] = ('First Year', 'Second Year', 'Third Year', 'Last Year')
+year_dropdown.grid(row=10, column=3)
+
+branch_dropdown = ttk.Combobox(root, textvariable=branch_value)
+branch_dropdown['values'] = ("AI&DS", "CS", "IT", "ENTC", "Electrical", "Mechanical", "Civil")
+branch_dropdown.grid(row=11, column=3)
+
+check_box = Checkbutton(root, text="Remember Me ?", variable=check_box)
+check_box.grid(row=12, column=3)
+
+Button(root, text="Register", command=register).grid(row=13, column=3)
+Button(root, text="Clear All", command=clear_all).grid(row=14, column=3)
+
+root.mainloop()
